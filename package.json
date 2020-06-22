@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "author": "stephan@superskill.me",
-  "main": "bin/start.js",
+  "main": "start.js",
   "scripts": {
-    "start": "node bin/start.js",
-    "stop": "node bin/stop.js"
+    "start": "node start.js",
+    "stop": "node stop.js"
   },
   "dependencies": {
     "express": "^4.15.3"

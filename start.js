@@ -10,8 +10,8 @@ app.listen(port, function() {
 app.get('*', (req, res) => {
   var path = req.params['0'];
   if (path === '/') {
-    res.sendFile(__dirname + '/app/index.html');
+    res.sendFile(__dirname + '/docs/index.html');
   } else {
-    res.sendFile(__dirname + '/app/' + path);
+    res.sendFile(__dirname + '/docs/' + path);
   }
 })
