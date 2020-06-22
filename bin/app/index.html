@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+    <script src="navigator.js"></script>
+  </head>
+
+  <script type="text/javascript">
+    $(document).on("pagecreate", function() {
+      new Navigator($("#app"), {
+        'Welcome': { col: 0, row: 0, src: 'welcome.html'},
+        'Catalog': { col: -1, row: 1, src: 'catalog.html', icon: 'C' },
+        'Practice': { col: 0, row: 1, src: 'practice.html', icon: 'P' }
+      });
+    });
+  </script>
+
+  <body>
+    <div id="app" data-role="page"></div>
+  </body>
+</html>

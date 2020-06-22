@@ -1,0 +1,14 @@
+{
+  "name": "superskill.me",
+  "version": "1.0.0",
+  "description": "",
+  "author": "stephan@superskill.me",
+  "main": "bin/start.js",
+  "scripts": {
+    "start": "node bin/start.js",
+    "stop": "node bin/stop.js"
+  },
+  "dependencies": {
+    "express": "^4.15.3"
+  }
+}
