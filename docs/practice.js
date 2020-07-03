@@ -74,4 +74,4 @@ let Practice = function(skill) {
   }.bind(this));
 };
 
-new Practice("/skills/notes.yaml");
+new Practice("skills/notes.yaml");
