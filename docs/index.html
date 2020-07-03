@@ -2,24 +2,56 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
-    <script src="navigator.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/3.4.6/js-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r118/three.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.12/Tone.js"></script>
+
+    <script src="lib/three.interaction.js"></script>
+    
+    <script src="device_screen.js"></script>
+    <script src="device_speaker.js"></script>
+    <script src="practice.js"></script>
   </head>
 
   <script type="text/javascript">
-    $(document).on("pagecreate", function() {
-      new Navigator($("#app"), {
-        'Welcome': { col: 0, row: 0, src: 'welcome.html'},
-        'Catalog': { col: -1, row: 1, src: 'catalog.html', icon: 'C' },
-        'Practice': { col: 0, row: 1, src: 'practice.html', icon: 'P' }
-      });
+    $(document).ready(function() {
+      let renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      let scene = new THREE.Scene();
+      scene.background = new THREE.Color( 0xDDFFDD );
+
+      let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.set(0, -20, 1);
+      camera.lookAt(0, 0, 0);
+
+      let frontlight = new THREE.DirectionalLight(); frontlight.position.set(-1, -1, 1); scene.add(frontlight);
+      let backlight = new THREE.DirectionalLight(0xFFFFFF, 0.5); backlight.position.set(1, 1, -1); scene.add(backlight);
+  
+      let interaction = new THREE.Interaction(renderer, scene, camera);
+      
+      let cube = new THREE.Mesh(
+        new THREE.BoxGeometry(10, 10, 10),
+        new THREE.MeshPhongMaterial({ color: 0x999999 }),
+      );
+      cube.on('click', function(event) { alert("click"); event.stopPropagation(); });
+      cube.on('touchend', function(event) { alert("touch"); event.stopPropagation(); });
+      scene.add(cube);
+
+      let coords = [ 0, 0, 0 ];
+
+      let animate = function() {
+        requestAnimationFrame(animate);
+        cube.rotation.set(coords[0] += 0.01, coords[1] += 0.01, coords[2] += 0.01);
+        renderer.render(scene, camera);
+      }
+
+      animate();
     });
   </script>
 
-  <body>
-    <div id="app" data-role="page"></div>
-  </body>
+  <body style="margin: 0px; overflow: hidden;"></body>
 </html>

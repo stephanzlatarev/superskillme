@@ -1,0 +1,14 @@
+hint: Select the note you hear
+sequence:
+  - { time: 0, device: 'screen', action: 'appear' }
+  - { time: 100, object: 'C4', device: 'screen', action: 'appear' }
+  - { time: 300, object: 'C5', device: 'screen', action: 'appear' }
+
+  - { time: 1000, device: 'screen', action: 'appear' }
+  - { time: 1000, device: 'speaker', note: 'NOTE', duration: 5000 }
+
+  - { time: 6000, device: 'pointer', action: 'touch', object: 'NOTE' }
+
+samples:
+  - NOTE: C4
+  - NOTE: C5
