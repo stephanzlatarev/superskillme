@@ -37,11 +37,14 @@
         new THREE.BoxGeometry(10, 10, 10),
         new THREE.MeshPhongMaterial({ color: 0x999999 }),
       );
-      cube.on('click', function(event) { alert("click"); event.stopPropagation(); });
-      cube.on('touchend', function(event) { alert("touch"); event.stopPropagation(); });
       scene.add(cube);
 
       let coords = [ 0, 0, 0 ];
+
+      cube.on('click', function(event) {
+        cube.position.y += 0.3;
+        event.stopPropagation();
+      });
 
       let animate = function() {
         requestAnimationFrame(animate);
