@@ -9,52 +9,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.12/Tone.js"></script>
 
     <script src="lib/three.interaction.js"></script>
+    <script src="lib/scene.loader.js"></script>
+    <script src="lib/scene.space.js"></script>
     
     <script src="device_screen.js"></script>
     <script src="device_speaker.js"></script>
     <script src="practice.js"></script>
   </head>
-
-  <script type="text/javascript">
-    $(document).ready(function() {
-      let renderer = new THREE.WebGLRenderer();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      document.body.appendChild(renderer.domElement);
-
-      let scene = new THREE.Scene();
-      scene.background = new THREE.Color( 0xDDFFDD );
-
-      let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-      camera.position.set(0, -20, 1);
-      camera.lookAt(0, 0, 0);
-
-      let frontlight = new THREE.DirectionalLight(); frontlight.position.set(-1, -1, 1); scene.add(frontlight);
-      let backlight = new THREE.DirectionalLight(0xFFFFFF, 0.5); backlight.position.set(1, 1, -1); scene.add(backlight);
-  
-      let interaction = new THREE.Interaction(renderer, scene, camera);
-      
-      let cube = new THREE.Mesh(
-        new THREE.BoxGeometry(10, 10, 10),
-        new THREE.MeshPhongMaterial({ color: 0x999999 }),
-      );
-      scene.add(cube);
-
-      let coords = [ 0, 0, 0 ];
-
-      cube.on('click', function(event) {
-        cube.position.y += 0.3;
-        event.stopPropagation();
-      });
-
-      let animate = function() {
-        requestAnimationFrame(animate);
-        cube.rotation.set(coords[0] += 0.01, coords[1] += 0.01, coords[2] += 0.01);
-        renderer.render(scene, camera);
-      }
-
-      animate();
-    });
-  </script>
 
   <body style="margin: 0px; overflow: hidden;"></body>
 </html>

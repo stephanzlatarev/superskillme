@@ -1,0 +1,4 @@
+items:
+- size: [ 30, 25, 20 ]
+  orientation: [ 0, -30, 0 ]
+  item: geometry/sphere

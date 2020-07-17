@@ -1,6 +1,6 @@
 hint: Select the note you hear
 sequence:
-  - { time: 0, device: 'screen', action: 'appear' }
+  - { time: 0, device: 'screen', action: 'appear', object: 'music/staff' }
   - { time: 100, object: 'C4', device: 'screen', action: 'appear' }
   - { time: 300, object: 'C5', device: 'screen', action: 'appear' }
 

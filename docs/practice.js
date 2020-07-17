@@ -2,27 +2,61 @@ let Practice = function(skill) {
 
   this.devices = [];
 
-  this.prepare = function(url, skill, sample) {
+  this.prepare = function(url, skill, props) {
     let base = url.substring(0, url.lastIndexOf("/") + 1);
     let sequence = JSON.parse(JSON.stringify(skill.sequence));
-    let props = skill.samples[sample];
 
+    // Set base
     for (var s in sequence) {
-      let step = sequence[s];
+      sequence[s].base = base;
+    }
 
-      // Set base
-      step.base = base;
+    // Substitute parameters
+    if (props) {
+      for (var s in sequence) {
+        let step = sequence[s];
 
-      // Substitute parameters
-      let keys = Object.keys(step);
-      for (var k in keys) {
-        if (step[keys[k]] && props[step[keys[k]]]) {
-          step[keys[k]] = props[step[keys[k]]];
+        let keys = Object.keys(step);
+        for (var k in keys) {
+          if (step[keys[k]] && props[step[keys[k]]]) {
+            step[keys[k]] = props[step[keys[k]]];
+          }
         }
       }
     }
 
-    return sequence;
+    // Load assets
+    let isWaitingForAssets = true;
+    
+    for (var s in sequence) {
+      let step = sequence[s];
+      if (window.superskill.devices[step.device] && window.superskill.devices[step.device].load) {
+        window.superskill.devices[step.device].load(step);
+      }
+    }
+
+    return {
+      done: function(callOnCompletion) {
+        let testForCompletion = function() {
+          let isWaitingForAssets = false;
+          for (var s in sequence) {
+            let step = sequence[s];
+            let device = window.superskill.devices[step.device];
+            if (device && device.load && !device.load(step)) {
+              isWaitingForAssets = true;
+              break;
+            }
+          }
+          if (isWaitingForAssets) {
+            setTimeout(testForCompletion, 1000);
+          } else {
+            callOnCompletion(sequence);
+          }
+        };
+
+        testForCompletion();
+      }
+    };
   };
 
   this.step = function() {
@@ -34,7 +68,7 @@ let Practice = function(skill) {
       let thisStepTime = thisStep.time + this.startTime;
       if ((thisStepTime > this.playedTime) && (thisStepTime <= now)) {
         if (window.superskill.devices[thisStep.device]) {
-          console.log("Play step", thisStep);
+          console.log("Play step", thisStep, new Date());
           window.superskill.devices[thisStep.device].run(thisStep);
         } else {
           console.log("Skip step", thisStep);
@@ -68,10 +102,16 @@ let Practice = function(skill) {
 
   $.get(skill).done(function(data) {
     this.skill = jsyaml.safeLoad(data);
-    this.sample = this.prepare(skill, this.skill, Math.floor(Math.random() * this.skill.samples.length));
+    var props = (this.skill.samples && this.skill.samples.length) ? this.skill.samples[Math.floor(Math.random() * this.skill.samples.length)] : null;
 
-    this.play();
+    console.log("Preparing practice sequence...");
+    this.prepare(skill, this.skill, props).done(function(sequence) {
+      this.sample = sequence;
+
+      console.log("Playing practice sequence...");
+      this.play();
+    }.bind(this));
   }.bind(this));
 };
 
-new Practice("skills/notes.yaml");
+new Practice("skills/test.yaml");

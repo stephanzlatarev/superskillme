@@ -1,0 +1,16 @@
+items:
+- position: [ 0, 0, 48 ]
+  size: [ 100, 2, 2 ]
+  item: geometry/tube
+- position: [ 0, 0, 24 ]
+  size: [ 100, 2, 2 ]
+  item: geometry/tube
+- position: [ 0, 0, 0 ]
+  size: [ 100, 2, 2 ]
+  item: geometry/tube
+- position: [ 0, 0, -24 ]
+  size: [ 100, 2, 2 ]
+  item: geometry/tube
+- position: [ 0, 0, -48 ]
+  size: [ 100, 2, 2 ]
+  item: geometry/tube

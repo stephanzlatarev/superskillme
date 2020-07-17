@@ -1,0 +1,31 @@
+items:
+  - orientation: [ 0, 0, 0 ]
+    items: GEOMETRY/TUBE/SIDE
+  - orientation: [ 30, 0, 0 ]
+    items: GEOMETRY/TUBE/SIDE
+  - orientation: [ 60, 0, 0 ]
+    items: GEOMETRY/TUBE/SIDE
+  - orientation: [ 90, 0, 0 ]
+    items: GEOMETRY/TUBE/SIDE
+  - orientation: [ 120, 0, 0 ]
+    items: GEOMETRY/TUBE/SIDE
+  - orientation: [ 150, 0, 0 ]
+    items: GEOMETRY/TUBE/SIDE
+  - orientation: [ 180, 0, 0 ]
+    items: GEOMETRY/TUBE/SIDE
+  - orientation: [ 210, 0, 0 ]
+    items: GEOMETRY/TUBE/SIDE
+  - orientation: [ 240, 0, 0 ]
+    items: GEOMETRY/TUBE/SIDE
+  - orientation: [ 270, 0, 0 ]
+    items: GEOMETRY/TUBE/SIDE
+  - orientation: [ 300, 0, 0 ]
+    items: GEOMETRY/TUBE/SIDE
+  - orientation: [ 330, 0, 0 ]
+    items: GEOMETRY/TUBE/SIDE
+parts:
+  GEOMETRY/TUBE/COLOR: "#666666"
+  GEOMETRY/TUBE/SIDE:
+    - size: [ 100, 28 ]
+      position: [ 0, 0, 50 ]
+      texture: GEOMETRY/TUBE/COLOR

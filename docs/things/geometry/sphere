@@ -1,0 +1,19 @@
+items:
+  - size: [ 28, 100, 100 ]
+    orientation: [ 0, 0, 0 ]
+    item: geometry/tube
+  - size: [ 28, 100, 100 ]
+    orientation: [ 0, 0, 30 ]
+    item: geometry/tube
+  - size: [ 28, 100, 100 ]
+    orientation: [ 0, 0, 60 ]
+    item: geometry/tube
+  - size: [ 28, 100, 100 ]
+    orientation: [ 0, 0, 90 ]
+    item: geometry/tube
+  - size: [ 28, 100, 100 ]
+    orientation: [ 0, 0, 120 ]
+    item: geometry/tube
+  - size: [ 28, 100, 100 ]
+    orientation: [ 0, 0, 150 ]
+    item: geometry/tube

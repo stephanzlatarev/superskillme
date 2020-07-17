@@ -1,0 +1,6 @@
+hint: Test
+sequence:
+  - { time: 0, device: 'screen', action: 'appear', object: 'music/staff', size: [ 1000, 100, 100 ] }
+  - { time: 2000, device: 'screen', action: 'appear', object: 'music/note-A4', position: [ -100, 0, 0 ] }
+  - { time: 4000, device: 'screen', action: 'appear', object: 'music/note-B4', position: [    0, 0, 0 ] }
+  - { time: 6000, device: 'screen', action: 'appear', object: 'music/note-C5', position: [  100, 0, 0 ] }

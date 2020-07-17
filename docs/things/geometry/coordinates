@@ -1,0 +1,14 @@
+label: Coordinates
+items:
+- orientation: [ 90, 0, 0 ]
+  items:
+    - size: [ 1000, 10, 10 ]
+      item: geometry/tube
+- orientation: [ 0, 90, 0 ]
+  items:
+    - size: [ 1000, 10, 10 ]
+      item: geometry/tube
+- orientation: [ 0, 0, 90 ]
+  items:
+    - size: [ 1000, 10, 10 ]
+      item: geometry/tube
