@@ -7,15 +7,17 @@ window.superskill.devices.screen = new function() {
   let scene;
   let rotations = [];
 
+  let renderer = new THREE.WebGLRenderer();
+
   $(document).ready(function() {
-    let renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    let size = Math.min($(window).width(), $(window).height());
+    renderer.setSize(size, size);
     document.body.appendChild(renderer.domElement);
 
     scene = new THREE.Scene();
     scene.background = new THREE.Color( 0xFFFFFF );
 
-    let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    let camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
     camera.position.set(0, -200, 0);
     camera.lookAt(0, 0, 0);
 
@@ -36,6 +38,18 @@ window.superskill.devices.screen = new function() {
     }
 
     animate();
+  });
+
+  // Ensure the screen always fits the screen
+  let resizeTime = 0;
+  $(window).resize(function() {
+    resizeTime = new Date().getTime() + 1000;
+    setTimeout(function() {
+      if (new Date().getTime() > resizeTime) {
+        let size = Math.min($(window).width(), $(window).height());
+        renderer.setSize(size, size);
+      }
+    }, 1000);
   });
 
   let materials = {};

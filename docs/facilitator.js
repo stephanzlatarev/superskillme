@@ -25,7 +25,7 @@ let Facilitator = function() {
   };
 
   this.buttonPractice = $("<div>START PRACTICE</div>")
-    .css("cursor", "hand")
+    .css("cursor", "pointer")
     .css("display", "table-cell").css("width", "280px").css("height", "280px")
     .css("background-color", "#CC0000").css("border", "10px solid #CC3333").css("border-radius", "50%")
     .css("text-align", "center").css("vertical-align", "middle")
