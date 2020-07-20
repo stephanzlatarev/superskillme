@@ -113,5 +113,3 @@ let Practice = function(skill) {
     }.bind(this));
   }.bind(this));
 };
-
-new Practice("skills/test.yaml");
