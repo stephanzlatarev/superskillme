@@ -4,7 +4,10 @@ let Facilitator = function() {
 
   let goFullScreen = function() {
     return new Promise((resolve, reject) => {
-      if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+      let screenSize = Math.min($(window).width(), $(window).height());
+
+      // Go to full screen if on a mobile device where the screen is smaller than 800 pixels in any dimension
+      if ((screenSize < 800) && !document.fullscreenElement && document.documentElement.requestFullscreen) {
         document.documentElement
           .requestFullscreen()
           .then(function() {          
