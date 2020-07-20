@@ -16,8 +16,6 @@ let Facilitator = function() {
                 facilitator.show();
               }
             }.bind(this);
-    
-            // TODO: resize all devices
 
             resolve();
           });
