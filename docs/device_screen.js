@@ -48,6 +48,7 @@ window.superskill.devices.screen = new function() {
       if (new Date().getTime() > resizeTime) {
         let size = Math.min($(window).width(), $(window).height());
         renderer.setSize(size, size);
+        $("canvas").css("margin-top", ($(window).height() - size) / 2);
       }
     }, 1000);
   });
