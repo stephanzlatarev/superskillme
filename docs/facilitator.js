@@ -1,58 +1,77 @@
 let Facilitator = function() {
 
-  this.buttonPractice = $("<div>Start Practice</div>")
-    .css("background-color", "white").css("text-align", "center")
-    .css("width", "300px").css("margin-left", "auto").css("margin-right", "auto")
-    .css("padding", "81px 0px").css("font-size", "60px")
-    .on("click", function() {
+  let facilitator = this;
+
+  let goFullScreen = function() {
+    return new Promise((resolve, reject) => {
       if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
         document.documentElement
           .requestFullscreen()
           .then(function() {          
             document.documentElement.onfullscreenchange = function() {
               if (!document.fullscreenElement) {
-                this.show();
+                facilitator.show();
               }
             }.bind(this);
     
             // TODO: resize all devices
-          }.bind(this));
-      }
 
-      this.hide();
-      this.practice("skills/test.yaml");
-    }.bind(this));
+            resolve();
+          });
+      } else {
+        resolve();
+      }
+    });
+  };
+
+  this.buttonPractice = $("<div>START PRACTICE</div>")
+    .css("cursor", "hand")
+    .css("display", "table-cell").css("width", "280px").css("height", "280px")
+    .css("background-color", "#CC0000").css("border", "10px solid #CC3333").css("border-radius", "50%")
+    .css("text-align", "center").css("vertical-align", "middle")
+    .css("color", "white").css("font-size", "50px").css("font-weight", "900")
+    .on("click", function() {
+      goFullScreen().then(function() {
+        facilitator.hide();
+        facilitator.practice("skills/test.yaml");
+      });
+    });
+
+  let buttonPracticeCell = $("<div>")
+    .css("display", "block").css("width", "300px").css("height", "300px")
+    .css("margin-left", "auto").css("margin-right", "auto")
+    .append(this.buttonPractice);
 
   this.pageFacilitator = $("<div>")
     .css("position", "relative")
     .css("margin", "20%")
-    .append(this.buttonPractice);
+    .append(buttonPracticeCell);
 
   this.screen = $("<div>")
     .css("top", "0").css("left", "0")
     .css("width", "100%").css("height", "0%").css("overflow", "hidden")
     .css("position", "fixed").css("z-index", "1")
-    .css("transition", "0.5s")
-    .css("background-color", "rgba(245, 255, 250, 0.8)")
+    .css("transition", "1s")
+    .css("background-color", "rgba(250, 255, 250, 0.8)")
     .append(this.pageFacilitator);
 
   this.show = function() {
-    this.screen.css("height", "100%");
-  }.bind(this);
+    facilitator.screen.css("height", "100%");
+  };
 
   this.hide = function() {
-    this.screen.css("height", "0%");
-  }.bind(this);
+    facilitator.screen.css("height", "0%");
+  };
 
   this.practice = function(skill) {
     setTimeout(function() { new Practice(skill); });
-  }.bind(this);
+  };
 
   // Add facilitator screen
   $(document).ready(function() {
-    $("body").append(this.screen);
-    this.show();
-  }.bind(this));
+    $("body").append(facilitator.screen);
+    facilitator.show();
+  });
 };
 
 if (!window.superskill) window.superskill = {};
