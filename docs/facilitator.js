@@ -34,7 +34,7 @@ let Facilitator = function() {
     .on("click", function() {
       goFullScreen().then(function() {
         facilitator.hide();
-        facilitator.practice("skills/test.yaml");
+        facilitator.practice("skills/notes.yaml");
       });
     });
 

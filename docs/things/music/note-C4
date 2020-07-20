@@ -1,0 +1,6 @@
+items:
+- position: [ 0, 0, -72 ]
+  item: music/note
+- position: [ 0, 0, -72 ]
+  size: [ 50, 2, 2 ]
+  item: geometry/tube
