@@ -4,6 +4,10 @@ if (!window.superskill.devices) window.superskill.devices = {};
 window.superskill.devices.screen = new function() {
 
   let startTime = 0;
+
+  let objects = {};
+  let pendingBindOnClick = {};
+
   let scene;
   let rotations = [];
 
@@ -20,6 +24,8 @@ window.superskill.devices.screen = new function() {
     let camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
     camera.position.set(0, -200, 0);
     camera.lookAt(0, 0, 0);
+
+    new THREE.Interaction(renderer, scene, camera);
 
     let light1 = new THREE.DirectionalLight(0xFFFFFF, 0.3); light1.position.set(-1, -1, 1); scene.add(light1);
     let light2 = new THREE.DirectionalLight(0xFFFFFF, 0.3); light2.position.set(-1, -1, -1); scene.add(light2);
@@ -126,30 +132,54 @@ window.superskill.devices.screen = new function() {
       object.position.set(data.position[0], data.position[1], data.position[2]);
       parent.add(object);
 
-      return null;
+      return object;
     }
   };
 
   let load = function(instruction) {
-    if (instruction.object) {
-      return window.superskill.loader.load(instruction.object);
+    if (instruction.kind) {
+      return window.superskill.loader.load(instruction.kind);
     } else {
       return true;
     }
   };
 
+  let on = function(event, callback) {
+    if (event.action === 'click') {
+      if (objects[event.object]) {
+        bindOnClick(event.object, callback);
+      } else {
+        pendingBindOnClick[event.object] = callback;
+      }
+    }
+  };
+
+  let bindOnClick = function(object, callback) {
+    objects[object].on('click', function() {
+      callback(event);
+    });
+  };
+
   let run = function(instruction) {
     if (!startTime) startTime = new Date().getTime() - instruction.time;
 
-    if ((instruction.action === "appear") && instruction.object) {
+    if ((instruction.action === "appear") && instruction.kind) {
       // Add object to screen
-      window.superskill.loader.load(instruction.object, function(data) {
+      window.superskill.loader.load(instruction.kind, function(data) {
         if (instruction.position) data.position = instruction.position;
         if (instruction.orientation) data.orientation = instruction.orientation;
         if (instruction.rotation) data.rotation = instruction.rotation;
         if (instruction.size) data.size = instruction.size;
 
         let object = addObject(scene, data);
+
+        if (instruction.object) {
+          objects[instruction.object] = object;
+          if (pendingBindOnClick[instruction.object]) {
+            bindOnClick(instruction.object, pendingBindOnClick[instruction.object]);
+            delete pendingBindOnClick[instruction.object];
+          }
+        }
 
         if (instruction.rotation) {
           rotations.push({ object: object, rotation: instruction.rotation });
@@ -164,10 +194,12 @@ window.superskill.devices.screen = new function() {
 
   let device = {
     load: load,
+    on: on,
     run: run,
     clear: clear
   };
   device.load.bind(device);
+  device.on.bind(device);
   device.run.bind(device);
   device.clear.bind(device);
 

@@ -67,7 +67,8 @@ let Practice = function(skill) {
       let thisStep = this.sample[s];
       let thisStepTime = thisStep.time + this.startTime;
       if ((thisStepTime > this.playedTime) && (thisStepTime <= now)) {
-        if (window.superskill.devices[thisStep.device]) {
+        let device = window.superskill.devices[thisStep.device];
+        if (device && device.run) {
           console.log("Play step", thisStep, new Date());
           window.superskill.devices[thisStep.device].run(thisStep);
         } else {
