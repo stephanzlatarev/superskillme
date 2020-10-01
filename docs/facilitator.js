@@ -1,6 +1,7 @@
 let Facilitator = function() {
 
   let facilitator = this;
+  let practice = null;
 
   let goFullScreen = function() {
     return new Promise((resolve, reject) => {
@@ -25,6 +26,7 @@ let Facilitator = function() {
     });
   };
 
+  // TODO: The button should be inactive until the practice is fully loaded
   this.buttonPractice = $("<div>START PRACTICE</div>")
     .css("cursor", "pointer").css("user-select", "none")
     .css("display", "table-cell").css("width", "280px").css("height", "280px")
@@ -33,8 +35,7 @@ let Facilitator = function() {
     .css("color", "white").css("font-size", "50px").css("font-weight", "900")
     .on("click", function() {
       goFullScreen().then(function() {
-        facilitator.hide();
-        facilitator.practice("skills/notes.yaml");
+        facilitator.hide(function() { practice.play(); });
       });
     });
 
@@ -50,28 +51,31 @@ let Facilitator = function() {
 
   this.screen = $("<div>")
     .css("top", "0").css("left", "0")
-    .css("width", "100%").css("height", "0%").css("overflow", "hidden")
+    .css("width", "100%").css("height", "100%").css("overflow", "hidden")
     .css("position", "fixed").css("z-index", "1")
-    .css("transition", "1s")
     .css("background-color", "rgba(250, 255, 250, 0.8)")
     .append(this.pageFacilitator);
 
-  this.show = function() {
-    facilitator.screen.css("height", "100%");
+  this.show = function(callback) {
+    facilitator.screen.animate({ top: "0" }, 400, "linear", callback);
   };
 
-  this.hide = function() {
-    facilitator.screen.css("height", "0%");
+  this.hide = function(callback) {
+    facilitator.screen.animate({ top: "-100%" }, 400, "linear", callback);
   };
 
-  this.practice = function(skill) {
-    setTimeout(function() { new Practice(skill); });
+  this.practice = function() {
+    setTimeout(function() { practice.play(); });
   };
 
   // Add facilitator screen
   $(document).ready(function() {
     $("body").append(facilitator.screen);
     facilitator.show();
+
+    // Select next practice
+    practice = new Practice("skills/notes.yaml");
+    practice.prepare();
   });
 };
 

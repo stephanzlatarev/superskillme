@@ -50,6 +50,7 @@ let Practice = function(skill) {
           if (isWaitingForAssets) {
             setTimeout(testForCompletion, 1000);
           } else {
+            console.log("Practice sequence is now loaded");
             callOnCompletion(sequence);
           }
         };
@@ -108,9 +109,6 @@ let Practice = function(skill) {
     console.log("Preparing practice sequence...");
     this.prepare(skill, this.skill, props).done(function(sequence) {
       this.sample = sequence;
-
-      console.log("Playing practice sequence...");
-      this.play();
     }.bind(this));
   }.bind(this));
 };
