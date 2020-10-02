@@ -3,6 +3,8 @@ let Practice = function(skill) {
   this.devices = [];
 
   this.prepare = function(url, skill, props) {
+    if (!url) return;
+
     let base = url.substring(0, url.lastIndexOf("/") + 1);
     let sequence = JSON.parse(JSON.stringify(skill.sequence));
 
@@ -24,6 +26,15 @@ let Practice = function(skill) {
         }
       }
     }
+
+    // Identify all participating devices
+    for (var s in sequence) {
+      let step = sequence[s];
+      if (window.superskill.devices[step.device] && (this.devices.indexOf(step.device) < 0)) {
+        this.devices.push(step.device);
+      }
+    }
+    console.log("Participating devices:", this.devices);
 
     // Load assets
     let isWaitingForAssets = true;
@@ -58,7 +69,7 @@ let Practice = function(skill) {
         testForCompletion();
       }
     };
-  };
+  }.bind(this);
 
   this.step = function() {
     let now = new Date().getTime();
@@ -88,12 +99,22 @@ let Practice = function(skill) {
     if (waitTime < 100000) {
       setTimeout(this.step, waitTime);
     } else {
-      for (var d in this.devices) window.superskill.devices[this.devices[d]].clear();
-      console.log("Sample complete");
+      let status = true;
+      for (var d in this.devices) {
+        console.log('close device', d, this.devices[d]);
+        status = (status && window.superskill.devices[this.devices[d]].status());
+        window.superskill.devices[this.devices[d]].clear();
+      }
+
+      if (this.feedback) {
+        this.feedback(status ? "Well done!" : "Try again!");
+      }
     }
   }.bind(this);
 
-  this.play = function() {
+  this.play = function(feedback) {
+    this.feedback = feedback;
+
     for (var d in this.devices) window.superskill.devices[this.devices[d]].clear();
 
     console.log("Playing", this.sample);

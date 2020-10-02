@@ -35,7 +35,7 @@ let Facilitator = function() {
     .css("color", "white").css("font-size", "50px").css("font-weight", "900")
     .on("click", function() {
       goFullScreen().then(function() {
-        facilitator.hide(function() { practice.play(); });
+        facilitator.hide(function() { practice.play(facilitator.feedback); });
       });
     });
 
@@ -61,12 +61,14 @@ let Facilitator = function() {
   };
 
   this.hide = function(callback) {
+    window.superskill.devices.speaker.start();
     facilitator.screen.animate({ top: "-100%" }, 400, "linear", callback);
   };
 
-  this.practice = function() {
-    setTimeout(function() { practice.play(); });
-  };
+  this.feedback = function(message) {
+    this.buttonPractice.empty().append($("<div>" + message + "</div>"));
+    this.show();
+  }.bind(this);
 
   // Add facilitator screen
   $(document).ready(function() {

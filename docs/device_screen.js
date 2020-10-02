@@ -155,8 +155,9 @@ window.superskill.devices.screen = new function() {
   };
 
   let bindOnClick = function(object, callback) {
-    objects[object].on('click', function() {
-      callback(event);
+    objects[object].on('click', function(event) {
+      callback(object);
+      event.stopPropagation();
     });
   };
 
@@ -196,7 +197,8 @@ window.superskill.devices.screen = new function() {
     load: load,
     on: on,
     run: run,
-    clear: clear
+    clear: clear,
+    status: function() { return true; }
   };
   device.load.bind(device);
   device.on.bind(device);
