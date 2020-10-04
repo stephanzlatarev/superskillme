@@ -26,8 +26,7 @@ let Facilitator = function() {
     });
   };
 
-  // TODO: The button should be inactive until the practice is fully loaded
-  this.buttonPractice = $("<div>START PRACTICE</div>")
+  this.buttonPractice = $("<div>Loading...</div>")
     .css("cursor", "pointer").css("user-select", "none")
     .css("display", "table-cell").css("width", "280px").css("height", "280px")
     .css("background-color", "#CC0000").css("border", "10px solid #CC3333").css("border-radius", "50%")
@@ -38,6 +37,9 @@ let Facilitator = function() {
         facilitator.hide(function() { practice.play(facilitator.feedback); });
       });
     });
+  window.superskill.eventbus.on("practice", "loaded", function() {
+    facilitator.buttonPractice.empty().append($("<div>START PRACTICE</div>"));
+  });
 
   let buttonPracticeCell = $("<div>")
     .css("display", "block").css("width", "300px").css("height", "300px")

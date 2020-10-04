@@ -63,6 +63,7 @@ let Practice = function(skill) {
           } else {
             console.log("Practice sequence is now loaded");
             callOnCompletion(sequence);
+            window.superskill.eventbus.push("practice", "loaded");
           }
         };
 
