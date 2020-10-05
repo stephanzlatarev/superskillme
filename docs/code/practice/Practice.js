@@ -1,8 +1,28 @@
-let Practice = function(skill) {
+/*
+  The practice runs a single skill practice session 
+*/
 
-  this.devices = [];
+import { ControlCenter } from '../ControlCenter.js';
 
-  this.prepare = function(url, skill, props) {
+export class Practice {
+
+  constructor(skill) {
+    this.devices = [];
+    
+    $.get(skill).done(function(data) {
+      this.skill = jsyaml.safeLoad(data);
+      var props = (this.skill.samples && this.skill.samples.length)
+        ? this.skill.samples[Math.floor(Math.random() * this.skill.samples.length)]
+        : null;
+    
+      console.log("Preparing practice sequence...");
+      this.prepare(skill, this.skill, props).done(function(sequence) {
+        this.sample = sequence;
+      }.bind(this));
+    }.bind(this));
+  }
+
+  prepare(url, skill, props) {
     if (!url) return;
 
     let base = url.substring(0, url.lastIndexOf("/") + 1);
@@ -63,16 +83,16 @@ let Practice = function(skill) {
           } else {
             console.log("Practice sequence is now loaded");
             callOnCompletion(sequence);
-            window.superskill.eventbus.push("practice", "loaded");
+            ControlCenter.push("practice", "loaded");
           }
         };
 
         testForCompletion();
       }
     };
-  }.bind(this);
+  }
 
-  this.step = function() {
+  step() {
     let now = new Date().getTime();
     let waitTime = 100000;
 
@@ -98,11 +118,10 @@ let Practice = function(skill) {
     this.playedTime = now;
 
     if (waitTime < 100000) {
-      setTimeout(this.step, waitTime);
+      setTimeout(this.step.bind(this), waitTime);
     } else {
       let status = true;
       for (var d in this.devices) {
-        console.log('close device', d, this.devices[d]);
         status = (status && window.superskill.devices[this.devices[d]].status());
         window.superskill.devices[this.devices[d]].clear();
       }
@@ -111,9 +130,9 @@ let Practice = function(skill) {
         this.feedback(status ? "Well done!" : "Try again!");
       }
     }
-  }.bind(this);
+  }
 
-  this.play = function(feedback) {
+  play(feedback) {
     this.feedback = feedback;
 
     for (var d in this.devices) window.superskill.devices[this.devices[d]].clear();
@@ -122,15 +141,6 @@ let Practice = function(skill) {
     this.startTime = new Date().getTime();
     this.playedTime = 0;
     this.step();
-  }.bind(this);
+  }
 
-  $.get(skill).done(function(data) {
-    this.skill = jsyaml.safeLoad(data);
-    var props = (this.skill.samples && this.skill.samples.length) ? this.skill.samples[Math.floor(Math.random() * this.skill.samples.length)] : null;
-
-    console.log("Preparing practice sequence...");
-    this.prepare(skill, this.skill, props).done(function(sequence) {
-      this.sample = sequence;
-    }.bind(this));
-  }.bind(this));
-};
+}
