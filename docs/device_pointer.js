@@ -14,6 +14,8 @@ window.superskill.devices.pointer = new function() {
   };
 
   let load = function(instruction) {
+    if (!instruction || (instruction.device !== 'pointer')) return;
+
     if (instruction.object) {
       let onClick = function(object) {
         // Mark actual touch

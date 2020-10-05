@@ -1,103 +1,44 @@
 /*
-  The practice runs a single skill practice session 
+  The practice runs a single skill practice run 
 */
 
-import { ControlCenter } from '../ControlCenter.js';
+import { Skill } from './Skill.js';
 
 export class Practice {
 
   constructor(skill) {
-    this.devices = [];
-    
-    $.get(skill).done(function(data) {
-      this.skill = jsyaml.safeLoad(data);
-      var props = (this.skill.samples && this.skill.samples.length)
-        ? this.skill.samples[Math.floor(Math.random() * this.skill.samples.length)]
-        : null;
-    
-      console.log("Preparing practice sequence...");
-      this.prepare(skill, this.skill, props).done(function(sequence) {
-        this.sample = sequence;
-      }.bind(this));
-    }.bind(this));
+    this.skill = new Skill(skill);
   }
 
-  prepare(url, skill, props) {
-    if (!url) return;
+  play(feedback) {
+    this.feedback = feedback;
 
-    let base = url.substring(0, url.lastIndexOf("/") + 1);
-    let sequence = JSON.parse(JSON.stringify(skill.sequence));
+    let samples = this.skill.getSamples();
+    this.sequence = samples[Math.floor(Math.random() * samples.length)].sequence;
 
-    // Set base
-    for (var s in sequence) {
-      sequence[s].base = base;
-    }
+    this.devices = this.skill.getDevices();
+    for (var d in this.devices) {
+      window.superskill.devices[this.devices[d]].clear();
 
-    // Substitute parameters
-    if (props) {
-      for (var s in sequence) {
-        let step = sequence[s];
-
-        let keys = Object.keys(step);
-        for (var k in keys) {
-          if (step[keys[k]] && props[step[keys[k]]]) {
-            step[keys[k]] = props[step[keys[k]]];
-          }
+      if (window.superskill.devices[this.devices[d]].load) {
+        for (var s in this.sequence) {
+          window.superskill.devices[this.devices[d]].load(this.sequence[s]);
         }
       }
     }
 
-    // Identify all participating devices
-    for (var s in sequence) {
-      let step = sequence[s];
-      if (window.superskill.devices[step.device] && (this.devices.indexOf(step.device) < 0)) {
-        this.devices.push(step.device);
-      }
-    }
-    console.log("Participating devices:", this.devices);
+    this.startTime = new Date().getTime();
+    this.playedTime = 0;
 
-    // Load assets
-    let isWaitingForAssets = true;
-    
-    for (var s in sequence) {
-      let step = sequence[s];
-      if (window.superskill.devices[step.device] && window.superskill.devices[step.device].load) {
-        window.superskill.devices[step.device].load(step);
-      }
-    }
-
-    return {
-      done: function(callOnCompletion) {
-        let testForCompletion = function() {
-          let isWaitingForAssets = false;
-          for (var s in sequence) {
-            let step = sequence[s];
-            let device = window.superskill.devices[step.device];
-            if (device && device.load && !device.load(step)) {
-              isWaitingForAssets = true;
-              break;
-            }
-          }
-          if (isWaitingForAssets) {
-            setTimeout(testForCompletion, 1000);
-          } else {
-            console.log("Practice sequence is now loaded");
-            callOnCompletion(sequence);
-            ControlCenter.push("practice", "loaded");
-          }
-        };
-
-        testForCompletion();
-      }
-    };
+    this.step();
   }
 
   step() {
     let now = new Date().getTime();
     let waitTime = 100000;
-
-    for (var s in this.sample) {
-      let thisStep = this.sample[s];
+  
+    for (var s in this.sequence) {
+      let thisStep = this.sequence[s];
       let thisStepTime = thisStep.time + this.startTime;
       if ((thisStepTime > this.playedTime) && (thisStepTime <= now)) {
         let device = window.superskill.devices[thisStep.device];
@@ -108,15 +49,15 @@ export class Practice {
           console.log("Skip step", thisStep);
         }
       }
-
+  
       let thisStepWaitTime = thisStepTime - now;
       if ((thisStepWaitTime > 0) && (thisStepWaitTime < waitTime)) {
         waitTime = thisStepWaitTime;
       }
     }
-
+  
     this.playedTime = now;
-
+  
     if (waitTime < 100000) {
       setTimeout(this.step.bind(this), waitTime);
     } else {
@@ -125,22 +66,11 @@ export class Practice {
         status = (status && window.superskill.devices[this.devices[d]].status());
         window.superskill.devices[this.devices[d]].clear();
       }
-
+  
       if (this.feedback) {
         this.feedback(status ? "Well done!" : "Try again!");
       }
     }
-  }
-
-  play(feedback) {
-    this.feedback = feedback;
-
-    for (var d in this.devices) window.superskill.devices[this.devices[d]].clear();
-
-    console.log("Playing", this.sample);
-    this.startTime = new Date().getTime();
-    this.playedTime = 0;
-    this.step();
   }
 
 }

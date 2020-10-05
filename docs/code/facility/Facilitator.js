@@ -92,5 +92,4 @@ $(document).ready(function() {
 
   // Select next practice
   practice = new Practice("skills/notes.yaml");
-  practice.prepare();
 });

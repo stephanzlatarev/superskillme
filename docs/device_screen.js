@@ -191,6 +191,10 @@ window.superskill.devices.screen = new function() {
 
   let clear = function() {
     scene.children.length = 0;
+    
+    objects = {};
+    pendingBindOnClick = {};
+    rotations = [];
   };
 
   let device = {
