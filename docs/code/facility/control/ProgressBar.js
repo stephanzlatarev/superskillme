@@ -3,9 +3,13 @@ import { ControlCenter } from '../../ControlCenter.js';
 export class ProgressBar {
 
   constructor() {
+    let bar = $("<div>");
+
     ControlCenter.on("practice", "completed", function(data) {
-      // TODO: Transform the data into a progress bar
-      ControlCenter.push("footer", "active", data);
+      $("<span>&#x25CF;</span>")
+        .css("color", data.success ? "green" : "red")
+        .appendTo(bar);
+      ControlCenter.push("footer", "active", bar);
     });
   }
 

@@ -66,7 +66,17 @@ export class Practice {
         window.superskill.devices[this.devices[d]].clear();
       }
 
-      ControlCenter.push("practice", "completed", status ? "Well done!" : "Try again!");
+      if (status) {
+        ControlCenter.push("practice", "completed", {
+          success: true,
+          message: "Well done!",
+        });
+      } else {
+        ControlCenter.push("practice", "completed", {
+          success: false,
+          message: "Try again!",
+        });
+      }
     }
   }
 
