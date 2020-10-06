@@ -2,6 +2,7 @@
   The practice runs a single skill practice run 
 */
 
+import { ControlCenter } from '../ControlCenter.js';
 import { Skill } from './Skill.js';
 
 export class Practice {
@@ -10,9 +11,7 @@ export class Practice {
     this.skill = new Skill(skill);
   }
 
-  play(feedback) {
-    this.feedback = feedback;
-
+  play() {
     let samples = this.skill.getSamples();
     this.sequence = samples[Math.floor(Math.random() * samples.length)].sequence;
 
@@ -66,10 +65,8 @@ export class Practice {
         status = (status && window.superskill.devices[this.devices[d]].status());
         window.superskill.devices[this.devices[d]].clear();
       }
-  
-      if (this.feedback) {
-        this.feedback(status ? "Well done!" : "Try again!");
-      }
+
+      ControlCenter.push("practice", "completed", status ? "Well done!" : "Try again!");
     }
   }
 

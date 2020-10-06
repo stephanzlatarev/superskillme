@@ -2,6 +2,8 @@
   The facilitator connects the user with the activities they can do - set goals, practice, examine results, etc. 
 */
 
+import { Footer } from './control/Footer.js';
+import { ProgressBar } from './control/ProgressBar.js';
 import { ControlCenter } from '../ControlCenter.js';
 import { Practice } from '../practice/Practice.js';
 
@@ -16,11 +18,6 @@ export let Facilitator = {
   hide: function(callback) {
     window.superskill.devices.speaker.start();
     screen.animate({ top: "-100%" }, 400, "linear", callback);
-  },
-
-  feedback: function(message) {
-    buttonPractice.empty().append($("<div>" + message + "</div>"));
-    Facilitator.show();
   },
 
 };
@@ -58,7 +55,7 @@ let buttonPractice = $("<div>Loading...</div>")
   .css("color", "white").css("font-size", "50px").css("font-weight", "900")
   .on("click", function() {
     goFullScreen().then(function() {
-      Facilitator.hide(function() { practice.play(Facilitator.feedback); });
+      Facilitator.hide(function() { practice.play(); });
     });
   });
 
@@ -74,10 +71,16 @@ let pageFacilitator = $("<div>")
 
 let screen = $("<div>")
   .css("top", "0").css("left", "0")
-  .css("width", "100%").css("height", "100%").css("overflow", "hidden")
+  .css("width", "100%").css("height", "95%").css("overflow", "hidden")
   .css("position", "fixed").css("z-index", "1")
   .css("background-color", "rgba(250, 255, 250, 0.8)")
   .append(pageFacilitator);
+
+let footer = $("<div>")
+  .css("top", "95%").css("left", "0")
+  .css("width", "100%").css("height", "5%").css("overflow", "hidden")
+  .css("position", "fixed").css("z-index", "1")
+  .css("background-color", "rgba(250, 250, 255, 0.8)");
 
 ////////////// END PAGES ////////////////
 
@@ -85,10 +88,18 @@ ControlCenter.on("practice", "loaded", function() {
   buttonPractice.empty().append($("<div>START PRACTICE</div>"));
 });
 
+ControlCenter.on("practice", "completed", function() {
+  practice.play();
+});
+
 // Add facilitator screen
 $(document).ready(function() {
   $("body").append(screen);
   Facilitator.show();
+
+  $("body").append(footer);
+  new Footer(footer);
+  new ProgressBar();
 
   // Select next practice
   practice = new Practice("skills/notes.yaml");

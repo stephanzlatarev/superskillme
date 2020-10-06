@@ -16,10 +16,10 @@ export let ControlCenter = {
   },
 
   // Announce that the given box has switched to the given state
-  push: function(box, state) {
+  push: function(box, state, data) {
     if (listeners[box] && listeners[box][state]) {
       for (var callback in listeners[box][state]) {
-        listeners[box][state][callback]();
+        listeners[box][state][callback](data);
       }
     }
   },
