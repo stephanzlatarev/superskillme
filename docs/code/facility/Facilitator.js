@@ -7,7 +7,10 @@ import { ProgressBar } from './control/ProgressBar.js';
 import { ControlCenter } from '../ControlCenter.js';
 import { Practice } from '../practice/Practice.js';
 
+const MAX_REPETITIONS = 10;
+
 let practice = null;
+let repetitions = 0;
 
 export let Facilitator = {
 
@@ -89,7 +92,12 @@ ControlCenter.on("practice", "loaded", function() {
 });
 
 ControlCenter.on("practice", "completed", function() {
-  practice.play();
+  if (++repetitions < MAX_REPETITIONS) {
+    practice.play();
+  } else {
+    repetitions = 0;
+    Facilitator.show();
+  }
 });
 
 // Add facilitator screen
