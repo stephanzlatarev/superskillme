@@ -1,9 +1,9 @@
 hint: Select the note you hear
 sequence:
   - { time: 0, device: 'screen', action: 'appear', kind: 'music/sheet-small' }
-  - { time: 100, object: 'C4', device: 'screen', action: 'appear', kind: 'music/note-C4' }
-  - { time: 300, object: 'C5', device: 'screen', action: 'appear', kind: 'music/note-C5' }
-  - { time: 1000, device: 'speaker', note: 'NOTE', duration: 5000 }
+  - { time: 0, object: 'C4', device: 'screen', action: 'appear', kind: 'music/note-C4' }
+  - { time: 0, object: 'C5', device: 'screen', action: 'appear', kind: 'music/note-C5' }
+  - { time: 0, device: 'speaker', note: 'NOTE', duration: 3000 }
   - { time: 3000, device: 'pointer', action: 'touch', object: 'NOTE' }
 
 samples:
