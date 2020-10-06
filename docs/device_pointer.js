@@ -47,6 +47,8 @@ window.superskill.devices.pointer = new function() {
   };
 
   let status = function() {
+    if ((expect.length === 0) || (clicks.length < expect.length)) return;
+
     for (var i in expect) {
       var isFound = false;
       for (var j in clicks) {

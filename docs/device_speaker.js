@@ -17,7 +17,3 @@ window.superskill.devices.speaker.run = function(instruction) {
 window.superskill.devices.speaker.clear = function() {
   this.speakers.triggerRelease();
 }.bind(window.superskill.devices.speaker);
-
-window.superskill.devices.speaker.status = function() {
-  return true;
-}

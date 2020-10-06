@@ -34,11 +34,12 @@ export class Practice {
 
   step() {
     let now = new Date().getTime();
-    let waitTime = 100000;
+    let nextStepTime = now;
+    let practiceEndTime = now;
   
     for (var s in this.sequence) {
       let thisStep = this.sequence[s];
-      let thisStepTime = thisStep.time + this.startTime;
+      let thisStepTime = this.startTime + thisStep.time;
       if ((thisStepTime > this.playedTime) && (thisStepTime <= now)) {
         let device = window.superskill.devices[thisStep.device];
         if (device && device.run) {
@@ -48,21 +49,30 @@ export class Practice {
           console.log("Skip step", thisStep);
         }
       }
-  
-      let thisStepWaitTime = thisStepTime - now;
-      if ((thisStepWaitTime > 0) && (thisStepWaitTime < waitTime)) {
-        waitTime = thisStepWaitTime;
+
+      if ((thisStepTime > now) && (thisStepTime < nextStepTime)) {
+        nextStepTime = thisStepTime;
       }
+
+      practiceEndTime = Math.max(practiceEndTime, thisStepTime + (thisStep.duration ? thisStep.duration : 0));
     }
   
     this.playedTime = now;
-  
-    if (waitTime < 100000) {
-      setTimeout(this.step.bind(this), waitTime);
-    } else {
-      let status = true;
+
+    let status = null;
+    for (var d in this.devices) {
+      if (window.superskill.devices[this.devices[d]].status) {
+        var deviceStatus = window.superskill.devices[this.devices[d]].status();
+        if ((deviceStatus === true) || (deviceStatus === false)) {
+          status = deviceStatus;
+          break;
+        }
+      }
+    }
+
+    let shouldStop = (status !== null) || (now >= practiceEndTime);
+    if (shouldStop) {
       for (var d in this.devices) {
-        status = (status && window.superskill.devices[this.devices[d]].status());
         window.superskill.devices[this.devices[d]].clear();
       }
 
@@ -77,6 +87,11 @@ export class Practice {
           message: "Try again!",
         });
       }
+    } else {
+      // Don't wait for more than half a second
+      let waitTime = Math.min(nextStepTime - now, 500);
+
+      setTimeout(this.step.bind(this), waitTime);
     }
   }
 

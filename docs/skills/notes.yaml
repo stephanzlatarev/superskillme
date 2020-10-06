@@ -4,7 +4,7 @@ sequence:
   - { time: 0, object: 'C4', device: 'screen', action: 'appear', kind: 'music/note-C4' }
   - { time: 0, object: 'C5', device: 'screen', action: 'appear', kind: 'music/note-C5' }
   - { time: 0, device: 'speaker', note: 'NOTE', duration: 3000 }
-  - { time: 3000, device: 'pointer', action: 'touch', object: 'NOTE' }
+  - { time: 0, device: 'pointer', action: 'touch', object: 'NOTE' }
 
 samples:
   - NOTE: C4

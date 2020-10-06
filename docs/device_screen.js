@@ -202,7 +202,6 @@ window.superskill.devices.screen = new function() {
     on: on,
     run: run,
     clear: clear,
-    status: function() { return true; }
   };
   device.load.bind(device);
   device.on.bind(device);
