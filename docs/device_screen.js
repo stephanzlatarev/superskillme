@@ -11,6 +11,8 @@ window.superskill.devices.screen = new function() {
   let scene;
   let rotations = [];
 
+  let sceneClickListeners = [];
+
   let renderer = new THREE.WebGLRenderer();
 
   $(document).ready(function() {
@@ -146,7 +148,14 @@ window.superskill.devices.screen = new function() {
 
   let on = function(event, callback) {
     if (event.action === 'click') {
-      if (objects[event.object]) {
+      if (!event.object) {
+        let listener = function(event) {
+          callback();
+          event.stopPropagation();
+        };
+        sceneClickListeners.push(listener);
+        scene.on('click', listener);
+      } else if (objects[event.object]) {
         bindOnClick(event.object, callback);
       } else {
         pendingBindOnClick[event.object] = callback;
@@ -195,6 +204,8 @@ window.superskill.devices.screen = new function() {
     objects = {};
     pendingBindOnClick = {};
     rotations = [];
+    
+    for (var s in sceneClickListeners) scene.off('click', sceneClickListeners[s]);
   };
 
   let device = {

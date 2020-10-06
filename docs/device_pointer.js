@@ -25,8 +25,12 @@ window.superskill.devices.pointer = new function() {
         });
       };
 
+      // TODO: Make sure there is only one listener for a given object (or the scene). Avoid duplicates
       // TODO: Move to an event bus instead of calling the screen directly
       window.superskill.devices.screen.on({ action: 'click', object: instruction.object }, onClick);
+
+      // Add listener for the entire scene to detect clicks outside the object of interest
+      window.superskill.devices.screen.on({ action: 'click' }, onClick);
 
       return true;
     }
