@@ -3,25 +3,42 @@ The control center controls how participants in the application communicate with
 They always use the model to express commands. They send the commands to the control center and receive status from it.
 */
 
-// Registry of callbacks for state switches of entities
-let listeners = {};
+class Registry {
 
-export let ControlCenter = {
+  constructor() {
+    this.entities = {};
+    this.listeners = {}
+  }
 
-  // Register to get notified when the given box switches to the given state
-  on: function(box, state, callback) {
-    if (!listeners[box]) listeners[box] = {};
-    if (!listeners[box][state]) listeners[box][state] = [];
-    listeners[box][state].push(callback);
-  },
+  // Register a singleton entity
+  set(entity, singleton) {
+    this.entities[entity] = singleton;
+  }
 
-  // Announce that the given box has switched to the given state
-  push: function(box, state, data) {
-    if (listeners[box] && listeners[box][state]) {
-      for (var callback in listeners[box][state]) {
-        listeners[box][state][callback](data);
-      }
+  // Get the registered singleton entity
+  get(entity) {
+    return this.entities[entity];
+  }
+
+  // Register a listener function to get notified when the given entity switches to the given state
+  on(entity, state, listener) {
+    ensureAndGetCollectionOfEntityListeners(this, entity, state).push(listener);
+  }
+
+  // Announce that the given entity has switched to the given state with the given data
+  push(entity, state, data) {
+    let listeners = ensureAndGetCollectionOfEntityListeners(this, entity, state);
+    for (var listener in listeners) {
+      listeners[listener](data);
     }
-  },
+  }
 
 }
+
+let ensureAndGetCollectionOfEntityListeners = function(registry, entity, state) {
+  if (!registry.listeners[entity]) registry.listeners[entity] = {};
+  if (!registry.listeners[entity][state]) registry.listeners[entity][state] = [];
+  return registry.listeners[entity][state];
+}
+
+export let ControlCenter = new Registry();
