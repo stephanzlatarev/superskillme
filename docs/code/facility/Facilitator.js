@@ -5,12 +5,9 @@
 import { Footer } from './control/Footer.js';
 import { ProgressBar } from './control/ProgressBar.js';
 import { ControlCenter } from '../ControlCenter.js';
-import { Practice } from '../practice/Practice.js';
+import { Workout } from '../practice/Workout.js';
 
-const MAX_REPETITIONS = 10;
-
-let practice = null;
-let repetitions = 0;
+let workout = new Workout();
 
 export let Facilitator = {
 
@@ -58,7 +55,7 @@ let buttonPractice = $("<div>Loading...</div>")
   .css("color", "white").css("font-size", "50px").css("font-weight", "900")
   .on("click", function() {
     goFullScreen().then(function() {
-      Facilitator.hide(function() { practice.play(); });
+      Facilitator.hide(function() { workout.start(); });
     });
   });
 
@@ -87,18 +84,11 @@ let footer = $("<div>")
 
 ////////////// END PAGES ////////////////
 
-ControlCenter.on("practice", "loaded", function() {
-  buttonPractice.empty().append($("<div>START PRACTICE</div>"));
+ControlCenter.on("workout", "loaded", function() {
+  buttonPractice.empty().append($("<div>START WORKOUT</div>"));
 });
 
-ControlCenter.on("practice", "completed", function() {
-  if (++repetitions < MAX_REPETITIONS) {
-    practice.play();
-  } else {
-    repetitions = 0;
-    Facilitator.show();
-  }
-});
+ControlCenter.on("workout", "completed", function() { Facilitator.show(); });
 
 // Add facilitator screen
 $(document).ready(function() {
@@ -109,6 +99,5 @@ $(document).ready(function() {
   new Footer(footer);
   new ProgressBar();
 
-  // Select next practice
-  practice = new Practice("skills/notes.yaml");
+  workout.prepare();
 });
