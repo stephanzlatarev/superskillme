@@ -3,7 +3,7 @@
 */
 
 import { ControlCenter } from '../ControlCenter.js';
-import { Sample } from './Sample.js';
+import { Sequence } from './Sequence.js';
 
 export class Skill {
 
@@ -49,7 +49,7 @@ let load = function(url) {
   // Split samples
   let samples = [];
   for (var s in skill.samples) {
-    samples.push(new Sample(skill.sequence, skill.samples[s]));
+    samples.push(new Sequence(skill.sequence, skill.samples[s]));
   }
 
   // Load assets

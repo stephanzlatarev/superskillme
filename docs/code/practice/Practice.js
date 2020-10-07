@@ -1,9 +1,9 @@
 /*
-  The practice runs a single skill practice run 
+  The practice runs a single sequence of a skill 
 */
 
 import { ControlCenter } from '../ControlCenter.js';
-import { Skill } from './Skill.js';
+import { Skill } from '../skill/Skill.js';
 
 export class Practice {
 
