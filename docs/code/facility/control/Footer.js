@@ -1,11 +1,11 @@
-import { ControlCenter } from '../../ControlCenter.js';
+import { Hub } from '../../Hub.js';
 
 export class Footer {
 
   constructor(htmlElement) {
     let element = htmlElement;
 
-    ControlCenter.on("footer", "active", function(data) {
+    Hub.on("footer", "active", function(data) {
       element.empty().append(data);
     });
   }

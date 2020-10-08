@@ -1,15 +1,15 @@
-import { ControlCenter } from '../../ControlCenter.js';
+import { Hub } from '../../Hub.js';
 
 export class ProgressBar {
 
   constructor() {
     let bar = $("<div>");
 
-    ControlCenter.on("practice", "completed", function(data) {
+    Hub.on("practice", "completed", function(data) {
       $("<span>&#x25CF;</span>")
         .css("color", data.success ? "green" : "red")
         .appendTo(bar);
-      ControlCenter.push("footer", "active", bar);
+      Hub.push("footer", "active", bar);
     });
   }
 

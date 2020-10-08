@@ -4,10 +4,9 @@
 
 import { Footer } from './control/Footer.js';
 import { ProgressBar } from './control/ProgressBar.js';
-import { ControlCenter } from '../ControlCenter.js';
+import { Hub } from '../Hub.js';
+import { Trainer } from '../practice/Trainer.js';
 import { Workout } from '../practice/Workout.js';
-
-let workout = new Workout();
 
 export let Facilitator = {
 
@@ -55,7 +54,7 @@ let buttonPractice = $("<div>Loading...</div>")
   .css("color", "white").css("font-size", "50px").css("font-weight", "900")
   .on("click", function() {
     goFullScreen().then(function() {
-      Facilitator.hide(function() { workout.start(); });
+      Facilitator.hide(function() { Hub.get("workout").start(); });
     });
   });
 
@@ -84,11 +83,11 @@ let footer = $("<div>")
 
 ////////////// END PAGES ////////////////
 
-ControlCenter.on("workout", "loaded", function() {
+Hub.on("workout", "loaded", function() {
   buttonPractice.empty().append($("<div>START WORKOUT</div>"));
 });
 
-ControlCenter.on("workout", "completed", function() { Facilitator.show(); });
+Hub.on("workout", "completed", function() { Facilitator.show(); });
 
 // Add facilitator screen
 $(document).ready(function() {
@@ -99,5 +98,6 @@ $(document).ready(function() {
   new Footer(footer);
   new ProgressBar();
 
-  workout.prepare();
+  Hub.set("trainer", new Trainer());
+  Hub.set("workout", new Workout());
 });

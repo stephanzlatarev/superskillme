@@ -2,7 +2,7 @@
   The practice runs a single sequence of a skill 
 */
 
-import { ControlCenter } from '../ControlCenter.js';
+import { Hub } from '../Hub.js';
 import { Skill } from '../skill/Skill.js';
 
 export class Practice {
@@ -77,12 +77,12 @@ export class Practice {
       }
 
       if (status) {
-        ControlCenter.push("practice", "completed", {
+        Hub.push("practice", "completed", {
           success: true,
           message: "Well done!",
         });
       } else {
-        ControlCenter.push("practice", "completed", {
+        Hub.push("practice", "completed", {
           success: false,
           message: "Try again!",
         });

@@ -2,7 +2,7 @@
   The skill object holds the data for running a skill practice, such as list of participating devices and assets of steps
 */
 
-import { ControlCenter } from '../ControlCenter.js';
+import { Hub } from '../Hub.js';
 import { Sequence } from './Sequence.js';
 
 export class Skill {
@@ -77,7 +77,7 @@ let load = function(url) {
         setTimeout(testForCompletion, 1000);
       } else {
         console.log("Practice sequence is now loaded");
-        ControlCenter.push("practice", "loaded");
+        Hub.push("practice", "loaded");
         resolve({
           devices: devices,
           samples: samples,

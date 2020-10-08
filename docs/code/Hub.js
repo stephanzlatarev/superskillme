@@ -1,6 +1,5 @@
 /*
-The control center controls how participants in the application communicate with each other.
-They always use the model to express commands. They send the commands to the control center and receive status from it.
+The hub is the place for participants in the application to exchange information with each other
 */
 
 class Registry {
@@ -12,7 +11,9 @@ class Registry {
 
   // Register a singleton entity
   set(entity, singleton) {
+    console.log("[Control Center]", entity, "is set");
     this.entities[entity] = singleton;
+    this.push(entity, null, singleton);
   }
 
   // Get the registered singleton entity
@@ -27,6 +28,7 @@ class Registry {
 
   // Announce that the given entity has switched to the given state with the given data
   push(entity, state, data) {
+    console.log("[Control Center]", entity, "transitions to", state ? state : "initial state");
     let listeners = ensureAndGetCollectionOfEntityListeners(this, entity, state);
     for (var listener in listeners) {
       listeners[listener](data);
@@ -41,4 +43,4 @@ let ensureAndGetCollectionOfEntityListeners = function(registry, entity, state) 
   return registry.listeners[entity][state];
 }
 
-export let ControlCenter = new Registry();
+export let Hub = new Registry();
