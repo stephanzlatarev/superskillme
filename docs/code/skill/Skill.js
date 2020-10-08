@@ -11,6 +11,7 @@ export class Skill {
     load(url).then(function(data) {
       this.samples = data.samples;
       this.devices = data.devices;
+      Hub.set("skill", this);
     }.bind(this));
   }
 
@@ -49,7 +50,7 @@ let load = function(url) {
   // Split samples
   let samples = [];
   for (var s in skill.samples) {
-    samples.push(new Sequence(skill.sequence, skill.samples[s]));
+    samples.push(new Sequence(skill.sequence, devices, skill.samples[s]));
   }
 
   // Load assets
@@ -76,8 +77,6 @@ let load = function(url) {
       if (isWaitingForAssets) {
         setTimeout(testForCompletion, 1000);
       } else {
-        console.log("Practice sequence is now loaded");
-        Hub.push("practice", "loaded");
         resolve({
           devices: devices,
           samples: samples,

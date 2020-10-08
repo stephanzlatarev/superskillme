@@ -7,15 +7,12 @@ import { Skill } from '../skill/Skill.js';
 
 export class Practice {
 
-  constructor(skill) {
-    this.skill = new Skill(skill);
+  constructor(sequence) {
+    this.devices = sequence.devices;
+    this.sequence = sequence.sequence;
   }
 
-  play() {
-    let samples = this.skill.getSamples();
-    this.sequence = samples[Math.floor(Math.random() * samples.length)].sequence;
-
-    this.devices = this.skill.getDevices();
+  start() {
     for (var d in this.devices) {
       window.superskill.devices[this.devices[d]].clear();
 

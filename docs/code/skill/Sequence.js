@@ -3,8 +3,9 @@
 */
 export class Sequence {
 
-  constructor(sequence, sample) {
+  constructor(sequence, devices, sample) {
     this.sequence = JSON.parse(JSON.stringify(sequence));
+    this.devices = JSON.parse(JSON.stringify(devices));
 
     if (sample) {
       for (var s in this.sequence) {

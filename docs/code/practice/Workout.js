@@ -8,33 +8,26 @@ import { Practice } from './Practice.js';
 export class Workout {
 
   constructor() {
-    Hub.on("practice", "loaded", function() { Hub.push("workout", "loaded"); });
-    Hub.on("practice", "completed", function() { step(this); });
-
-    this.prepare();
-  }
-
-  prepare() {
-    practice = new Practice("skills/notes.yaml");
+    Hub.on("routine", null, function() { Hub.push("workout", "loaded"); });
+    Hub.on("practice", "completed", function() { step(this); }.bind(this));
   }
 
   start() {
-    practice.play();
+    this.routine = Hub.get("routine");
+
+    if (this.routine) {
+      this.routine.start();
+      step(this);
+    }
   }
 
 }
 
-// TODO: Change to Routine
-const MAX_REPETITIONS = 10;
-
-let practice = null;
-let repetitions = 0;
-
 let step = function(workout) {
-  if (++repetitions < MAX_REPETITIONS) {
-    practice.play();
+  let nextSequence = workout.routine.next();
+  if (nextSequence) {
+    new Practice(nextSequence).start();
   } else {
-    repetitions = 0;
     Hub.push("workout", "completed");
   }
 }

@@ -20,9 +20,12 @@ export class Routine {
   }
 
   next() {
-    if (this.index < this.sequences) {
+    if (this.index < this.sequences.length) {
       return this.sequences[this.index++];
     }
   }
 
+  size() {
+    return this.sequences.length;
+  }
 }
