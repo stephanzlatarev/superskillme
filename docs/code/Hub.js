@@ -11,7 +11,7 @@ class Registry {
 
   // Register a singleton entity
   set(entity, singleton) {
-    console.log("[Control Center]", entity, "is set");
+    console.log("[Hub]", entity, "is set");
     this.entities[entity] = singleton;
     this.push(entity, null, singleton);
   }
@@ -28,7 +28,7 @@ class Registry {
 
   // Announce that the given entity has switched to the given state with the given data
   push(entity, state, data) {
-    console.log("[Control Center]", entity, "transitions to", state ? state : "initial state");
+    console.log("[Hub]", entity, "transitions to", state ? state : "initial state");
     let listeners = ensureAndGetCollectionOfEntityListeners(this, entity, state);
     for (var listener in listeners) {
       listeners[listener](data);
