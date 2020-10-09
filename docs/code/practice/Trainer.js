@@ -16,24 +16,27 @@ export class Trainer {
 // TODO: Get this from user's plan, fitness and schedule
 // TODO: Make sure the routine fits in user's preference for workout length. Currently fixed to 12 repetitions of one skill
 let buildRoutine = function(trainer) {
-  new Skill("skills/notes.yaml");
+  let skill1 = new Skill("skills/notes-C4C5.yaml");
+  Hub.on({ name: "skill", instance: "skills/notes-C4C5.yaml" }, null, function() { loadRoutine(skill1); });
 
-  Hub.on("skill", null, function() { loadRoutine(trainer); });
+  let skill2 = new Skill("skills/notes-C4A4C5.yaml");
+  Hub.on({ name: "skill", instance: "skills/notes-C4A4C5.yaml" }, null, function() { loadRoutine(skill2); });
+
+  Hub.set("routine", new Routine());
 }
  
-let loadRoutine = function(trainer) {
-  let skill = Hub.get("skill");
+let loadRoutine = function(skill) {
+  let routine = Hub.get("routine");
   let samples = skill.getSamples();
-
-  let routine = new Routine();
-
   for (let s in samples) {
     routine.add(samples[s]);
   }
-
-  while (routine.size() < 12) {
+  for (let s = 0; s < 5; s++) {
     routine.add(samples[Math.floor(Math.random() * samples.length)]);
   }
 
-  Hub.set("routine", routine);
+  // If the routine is full, announce it
+  if (routine.size() >= 12) {
+    Hub.push("routine", "loaded", routine);
+  }
 }

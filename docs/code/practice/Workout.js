@@ -8,7 +8,7 @@ import { Practice } from './Practice.js';
 export class Workout {
 
   constructor() {
-    Hub.on("routine", null, function() { Hub.push("workout", "loaded"); });
+    Hub.on("routine", "loaded", function() { Hub.push("workout", "loaded"); });
     Hub.on("practice", "completed", function() { step(this); }.bind(this));
   }
 

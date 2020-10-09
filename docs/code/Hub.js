@@ -5,31 +5,35 @@ The hub is the place for participants in the application to exchange information
 class Registry {
 
   constructor() {
-    this.entities = {};
+    this.instances = {};
     this.listeners = {}
   }
 
-  // Register a singleton entity
-  set(entity, singleton) {
-    console.log("[Hub]", entity, "is set");
-    this.entities[entity] = singleton;
-    this.push(entity, null, singleton);
+  // Register an entity instance
+  set(entity, instance) {
+    let entityKey = key(entity);
+    this.instances[entityKey] = instance;
+
+    console.log("[Hub]", entityKey, "is set");
+    this.push(entityKey, null, instance);
   }
 
-  // Get the registered singleton entity
+  // Get the registered entity instance
   get(entity) {
-    return this.entities[entity];
+    return this.instances[key(entity)];
   }
 
   // Register a listener function to get notified when the given entity switches to the given state
   on(entity, state, listener) {
-    ensureAndGetCollectionOfEntityListeners(this, entity, state).push(listener);
+    ensureAndGetCollectionOfEntityListeners(this, key(entity), state).push(listener);
   }
 
   // Announce that the given entity has switched to the given state with the given data
   push(entity, state, data) {
-    console.log("[Hub]", entity, "transitions to", state ? state : "initial state");
-    let listeners = ensureAndGetCollectionOfEntityListeners(this, entity, state);
+    let entityKey = key(entity);
+    let listeners = ensureAndGetCollectionOfEntityListeners(this, entityKey, state);
+
+    console.log("[Hub]", entityKey, "transitions to", state ? state : "initial state");
     for (var listener in listeners) {
       listeners[listener](data);
     }
@@ -37,10 +41,18 @@ class Registry {
 
 }
 
-let ensureAndGetCollectionOfEntityListeners = function(registry, entity, state) {
-  if (!registry.listeners[entity]) registry.listeners[entity] = {};
-  if (!registry.listeners[entity][state]) registry.listeners[entity][state] = [];
-  return registry.listeners[entity][state];
+let key = function(entity) {
+  if (typeof(entity) === "string") {
+    return entity;
+  } else {
+    return entity.name + (entity.instance ? "/" + entity.instance : "");
+  }
+}
+
+let ensureAndGetCollectionOfEntityListeners = function(registry, key, state) {
+  if (!registry.listeners[key]) registry.listeners[key] = {};
+  if (!registry.listeners[key][state]) registry.listeners[key][state] = [];
+  return registry.listeners[key][state];
 }
 
 export let Hub = new Registry();

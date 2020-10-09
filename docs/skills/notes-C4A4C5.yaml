@@ -1,0 +1,13 @@
+hint: Select the note you hear
+sequence:
+  - { time: 0, device: 'screen', action: 'appear', kind: 'music/sheet-small' }
+  - { time: 0, object: 'C4', device: 'screen', action: 'appear', kind: 'music/note-C4' }
+  - { time: 0, object: 'A4', device: 'screen', action: 'appear', kind: 'music/note-A4' }
+  - { time: 0, object: 'C5', device: 'screen', action: 'appear', kind: 'music/note-C5' }
+  - { time: 0, device: 'speaker', note: 'NOTE', duration: 3000 }
+  - { time: 0, device: 'pointer', action: 'touch', object: 'NOTE' }
+
+samples:
+  - NOTE: C4
+  - NOTE: A4
+  - NOTE: C5

@@ -11,7 +11,7 @@ export class Skill {
     load(url).then(function(data) {
       this.samples = data.samples;
       this.devices = data.devices;
-      Hub.set("skill", this);
+      Hub.set({ name: "skill", instance: url }, this);
     }.bind(this));
   }
 
