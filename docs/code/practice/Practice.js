@@ -8,6 +8,7 @@ import { Skill } from '../skill/Skill.js';
 export class Practice {
 
   constructor(sequence) {
+    this.skill = sequence.skill;
     this.devices = sequence.devices;
     this.sequence = sequence.sequence;
   }
@@ -75,11 +76,13 @@ export class Practice {
 
       if (status) {
         Hub.push("practice", "completed", {
+          skill: this.skill,
           success: true,
           message: "Well done!",
         });
       } else {
         Hub.push("practice", "completed", {
+          skill: this.skill,
           success: false,
           message: "Try again!",
         });

@@ -50,7 +50,7 @@ let load = function(url) {
   // Split samples
   let samples = [];
   for (var s in skill.samples) {
-    samples.push(new Sequence(skill.sequence, devices, skill.samples[s]));
+    samples.push(new Sequence(url, skill.sequence, devices, skill.samples[s]));
   }
 
   // Load assets

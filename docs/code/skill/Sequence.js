@@ -3,7 +3,8 @@
 */
 export class Sequence {
 
-  constructor(sequence, devices, sample) {
+  constructor(url, sequence, devices, sample) {
+    this.skill = url;
     this.sequence = JSON.parse(JSON.stringify(sequence));
     this.devices = JSON.parse(JSON.stringify(devices));
 

@@ -7,6 +7,7 @@ import { ProgressBar } from './control/ProgressBar.js';
 import { Hub } from '../Hub.js';
 import { Trainer } from '../practice/Trainer.js';
 import { Workout } from '../practice/Workout.js';
+import { Fitness } from '../user/Fitness.js';
 
 export let Facilitator = {
 
@@ -83,6 +84,8 @@ let footer = $("<div>")
 
 ////////////// END PAGES ////////////////
 
+Hub.on("fitness", "updated", function(data) { if (localStorage) localStorage.fitness = JSON.stringify(data); });
+
 Hub.on("workout", "loaded", function() {
   buttonPractice.empty().append($("<div>START WORKOUT</div>"));
 });
@@ -98,6 +101,7 @@ $(document).ready(function() {
   new Footer(footer);
   new ProgressBar();
 
+  Hub.set("fitness", new Fitness((localStorage && localStorage.fitness) ? JSON.parse(localStorage.fitness) : {}));
   Hub.set("trainer", new Trainer());
   Hub.set("workout", new Workout());
 });
