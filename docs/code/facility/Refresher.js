@@ -15,10 +15,10 @@ export class Refresher {
 }
 
 let checkVersion = function(element) {
-  alert("head /");
+  alert("head .");
   $.ajax({
     type: "HEAD",
-    url: "/",
+    url: ".",
     success: function(data, status, request) {
       alert("got response:" + request);
       let lastModified = request.getResponseHeader("last-modified");
