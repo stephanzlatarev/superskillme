@@ -25,7 +25,10 @@ let checkVersion = function() {
         window.location.reload();
       }
 
-      let version = $("<div>").css("width", "100%").css("text-align", "right").append("Version: " + lastModified);
+      let version = $("<div>")
+        .css("width", "100%").css("text-align", "right")
+        .css("font-size", "70%")
+        .append("Version: " + lastModified);
       Hub.push("footer", "active", version);
     }
   });
