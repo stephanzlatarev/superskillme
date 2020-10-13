@@ -23,7 +23,7 @@ let checkVersion = function(element) {
         element.empty().append("Version: " + lastModified);
       } else {
         localStorage.appversion = lastModified;
-        window.location.reload(true);
+        window.location.reload();
       }
     }
   });
