@@ -15,8 +15,7 @@ export class ProgressBar {
     }.bind(this));
 
     Hub.on("practice", "completed", function(data) {
-      let size = (window.innerWidth - this.blocks - 6) / this.blocks;
-      this.bar.append(block(size, data.success ? "green" : "red"));
+      this.bar.append(block(window.innerWidth / this.blocks, data.success ? "green" : "red"));
       Hub.push("footer", "active", this.bar);
     }.bind(this));
   }
@@ -36,7 +35,6 @@ let gradient = function(color) {
 let block = function(size, color) {
   return $("<div>")
     .css("display", "block").css("float", "left")
-    .css("margin-left", "1px")
     .css("width", size + "px").css("height", "100%")
     .css("background", gradient(color))
     .css("box-shadow", "0 0 8px 1px white inset")
