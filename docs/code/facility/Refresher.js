@@ -4,7 +4,6 @@
 export class Refresher {
 
   constructor(htmlElement) {
-    alert("storage:" + localStorage);
     if (localStorage) {
       let element = htmlElement;
       checkVersion(element);
@@ -15,14 +14,11 @@ export class Refresher {
 }
 
 let checkVersion = function(element) {
-  alert("head .");
   $.ajax({
     type: "HEAD",
     url: ".",
     success: function(data, status, request) {
-      alert("got response:" + request);
       let lastModified = request.getResponseHeader("last-modified");
-      alert("got last modified:" + lastModified + " vs " + localStorage.appversion);
       if (lastModified === localStorage.appversion) {
         element.empty().append("Version: " + lastModified);
       } else {
