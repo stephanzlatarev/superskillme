@@ -83,13 +83,6 @@ let footer = $("<div>")
   .css("position", "fixed").css("z-index", "1")
   .css("background-color", "white");
 
-let appversion = $("<div>")
-  .css("top", "95%").css("left", "0")
-  .css("width", "100%").css("height", "5%").css("overflow", "hidden")
-  .css("position", "absolute").css("z-index", "2")
-  .css("text-align", "right").css("font-size", "70%")
-  .css("background-color", "rgba(0, 0, 0, 0)");
-
 ////////////// END PAGES ////////////////
 
 Hub.on("fitness", "updated", function(data) { if (localStorage) localStorage.fitness = JSON.stringify(data); });
@@ -108,9 +101,7 @@ $(document).ready(function() {
   $("body").append(footer);
   new Footer(footer);
   new ProgressBar();
-
-  $("body").append(appversion);
-  new Refresher(appversion);
+  new Refresher();
 
   Hub.set("fitness", new Fitness((localStorage && localStorage.fitness) ? JSON.parse(localStorage.fitness) : {}));
   Hub.set("trainer", new Trainer());
