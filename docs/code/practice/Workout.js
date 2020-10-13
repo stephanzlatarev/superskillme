@@ -16,6 +16,7 @@ export class Workout {
     this.routine = Hub.get("routine");
 
     if (this.routine) {
+      Hub.push("workout", "started");
       this.routine.start();
       step(this);
     }

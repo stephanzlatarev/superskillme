@@ -6,6 +6,10 @@ export class ProgressBar {
     this.bar = $("<div>").css("width", "100%").css("height", "100%");
     this.blocks = 20;
 
+    Hub.on("workout", "started", function(routine) {
+      this.bar.empty();
+    }.bind(this));
+
     Hub.on("routine", "loaded", function(routine) {
       this.blocks = routine.size();
     }.bind(this));
