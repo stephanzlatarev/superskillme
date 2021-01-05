@@ -6,6 +6,7 @@ import { Refresher } from './Refresher.js';
 import { Footer } from './control/Footer.js';
 import { ProgressBar } from './control/ProgressBar.js';
 import { Hub } from '../Hub.js';
+import { Planner } from '../plan/Planner.js';
 import { Trainer } from '../practice/Trainer.js';
 import { Workout } from '../practice/Workout.js';
 import { Fitness } from '../user/Fitness.js';
@@ -13,12 +14,12 @@ import { Fitness } from '../user/Fitness.js';
 export let Facilitator = {
 
   show: function(callback) {
-    screen.animate({ top: "0" }, 400, "linear", callback);
+    pageFacilitator.animate({ top: "0" }, 400, "linear", callback);
   },
 
   hide: function(callback) {
     window.superskill.devices.speaker.start();
-    screen.animate({ top: "-100%" }, 400, "linear", callback);
+    pageFacilitator.animate({ top: "-100%" }, 400, "linear", callback);
   },
 
 };
@@ -48,11 +49,11 @@ let goFullScreen = function() {
   });
 };
 
-let buttonPractice = $("<div>Loading...</div>")
+let buttonPractice = $("<div>START</div>").css("visibility", "hidden")
   .css("cursor", "pointer").css("user-select", "none")
-  .css("display", "table-cell").css("width", "280px").css("height", "280px")
-  .css("background-color", "#CC0000").css("border", "10px solid #CC3333").css("border-radius", "50%")
-  .css("text-align", "center").css("vertical-align", "middle")
+  .css("display", "table-cell")
+  .css("background-color", "#CC0000").css("border", "10px solid #CC3333").css("border-radius", "20%")
+  .css("text-align", "center").css("vertical-align", "middle").css("padding", "0px 20px")
   .css("color", "white").css("font-size", "50px").css("font-weight", "900")
   .on("click", function() {
     goFullScreen().then(function() {
@@ -66,16 +67,10 @@ let buttonPracticeCell = $("<div>")
   .append(buttonPractice);
 
 let pageFacilitator = $("<div>")
-  .css("position", "relative")
-  .css("margin", "20%")
-  .append(buttonPracticeCell);
-
-let screen = $("<div>")
   .css("top", "0").css("left", "0")
   .css("width", "100%").css("height", "95%").css("overflow", "hidden")
   .css("position", "fixed").css("z-index", "1")
-  .css("background-color", "rgba(250, 255, 250, 0.8)")
-  .append(pageFacilitator);
+  .css("background-color", "rgba(250, 255, 250, 0.8)");
 
 let footer = $("<div>")
   .css("top", "95%").css("left", "0")
@@ -88,14 +83,16 @@ let footer = $("<div>")
 Hub.on("fitness", "updated", function(data) { if (localStorage) localStorage.fitness = JSON.stringify(data); });
 
 Hub.on("workout", "loaded", function() {
-  buttonPractice.empty().append($("<div>START WORKOUT</div>"));
+  buttonPractice.css("visibility", "visible");
 });
 
 Hub.on("workout", "completed", function() { Facilitator.show(); });
 
 // Add facilitator screen
 $(document).ready(function() {
-  $("body").append(screen);
+  $("body").append(pageFacilitator);
+  new Planner($("<div>").css("height", "80%").css("margin", "20px").appendTo(pageFacilitator));
+  buttonPracticeCell.appendTo(pageFacilitator);
   Facilitator.show();
 
   $("body").append(footer);
