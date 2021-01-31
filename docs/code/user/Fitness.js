@@ -1,7 +1,7 @@
 import { Hub } from '../Hub.js';
 
 /*
-  Fitness is the state of skillfullness of the user
+  Fitness is the state of skillfulness of the user
 */
 export class Fitness {
 

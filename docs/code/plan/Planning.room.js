@@ -1,15 +1,13 @@
 import { Hub } from '../Hub.js';
+import Plan from '../plan/Plan.data.js';
 
 /*
-  Helps the user plan the goals 
+  The planning room shows the current goals and plans and helps the user refine them 
 */
-export class Planner {
+export class Planning {
 
   constructor(element) {
-    element.empty().append(layout(
-      "Music",
-      "Leadership"
-    ));
+    element.empty().append(layout(...Plan.getGoals()));
   }
 
 }

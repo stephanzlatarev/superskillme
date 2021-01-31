@@ -6,7 +6,7 @@ import { Refresher } from './Refresher.js';
 import { Footer } from './control/Footer.js';
 import { ProgressBar } from './control/ProgressBar.js';
 import { Hub } from '../Hub.js';
-import { Planner } from '../plan/Planner.js';
+import { Planning } from '../plan/Planning.room.js';
 import { Trainer } from '../practice/Trainer.js';
 import { Workout } from '../practice/Workout.js';
 import { Fitness } from '../user/Fitness.js';
@@ -91,7 +91,7 @@ Hub.on("workout", "completed", function() { Facilitator.show(); });
 // Add facilitator screen
 $(document).ready(function() {
   $("body").append(pageFacilitator);
-  new Planner($("<div>").css("height", "80%").css("margin", "20px").appendTo(pageFacilitator));
+  new Planning($("<div>").css("height", "80%").css("margin", "20px").appendTo(pageFacilitator));
   buttonPracticeCell.appendTo(pageFacilitator);
   Facilitator.show();
 
